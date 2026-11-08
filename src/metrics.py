@@ -20,7 +20,11 @@ def precision_at_k(recommended: Sequence[int], relevant: Collection[int], k: int
         relevant: Ids of relevant (test rating >= 4) movies.
         k: Cut-off.
     """
-    raise NotImplementedError("TODO: |top-k ∩ relevant| / k")
+    if k <= 0:
+        return 0.0
+    top_k = recommended[:k]
+    hits = sum(1 for item in top_k if item in relevant)
+    return hits / k
 
 
 def recall_at_k(recommended: Sequence[int], relevant: Collection[int], k: int) -> float:
@@ -28,14 +32,22 @@ def recall_at_k(recommended: Sequence[int], relevant: Collection[int], k: int) -
 
     Returns 0.0 when ``relevant`` is empty.
     """
-    raise NotImplementedError("TODO: |top-k ∩ relevant| / |relevant|")
+    if not relevant:
+        return 0.0
+    top_k = recommended[:k]
+    hits = sum(1 for item in top_k if item in relevant)
+    return hits / len(relevant)
 
 
 def rmse(y_true: Sequence[float] | np.ndarray, y_pred: Sequence[float] | np.ndarray) -> float:
     """Root mean squared error."""
-    raise NotImplementedError("TODO")
+    y_true_arr = np.asarray(y_true, dtype=float)
+    y_pred_arr = np.asarray(y_pred, dtype=float)
+    return float(np.sqrt(np.mean((y_true_arr - y_pred_arr) ** 2)))
 
 
 def mae(y_true: Sequence[float] | np.ndarray, y_pred: Sequence[float] | np.ndarray) -> float:
     """Mean absolute error."""
-    raise NotImplementedError("TODO")
+    y_true_arr = np.asarray(y_true, dtype=float)
+    y_pred_arr = np.asarray(y_pred, dtype=float)
+    return float(np.mean(np.abs(y_true_arr - y_pred_arr)))
