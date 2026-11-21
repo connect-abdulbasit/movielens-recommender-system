@@ -1,50 +1,44 @@
-"""Non-personalised baselines: random and popularity."""
-from __future__ import annotations
-
+"""Reproducible random and popularity baselines using training ratings only."""
 import numpy as np
 
 
 class RandomRecommender:
-    """Recommends random unseen movies; predicts the global mean rating.
-
-    Args:
-        seed: Seed for reproducibility.
-    """
-
-    def __init__(self, seed: int = 0) -> None:
+    def __init__(self, seed=0):
         self.seed = seed
 
-    def fit(self, train_matrix: np.ndarray) -> "RandomRecommender":
-        """Store the training matrix and global mean."""
-        raise NotImplementedError("TODO")
+    def fit(self, train_matrix):
+        self.seen = train_matrix != 0
+        self.mean = float(train_matrix[self.seen].mean())
+        return self
 
-    def predict(self, user: int, item: int) -> float:
-        """Global mean rating (1-based ids)."""
-        raise NotImplementedError("TODO")
+    def predict(self, user, item):
+        return self.mean
 
-    def recommend(self, user: int, n: int = 10) -> list[tuple[int, float]]:
-        """``n`` random unseen movies as ``(movie_id, score)`` (1-based ids)."""
-        raise NotImplementedError("TODO")
+    def recommend(self, user, n=10):
+        unseen = np.flatnonzero(~self.seen[user - 1])
+        rng = np.random.default_rng([self.seed, user])
+        ranked = rng.permutation(unseen)[:max(n, 0)]
+        return [(int(i + 1), self.mean) for i in ranked]
 
 
 class PopularityRecommender:
-    """Recommends the most-rated / highest-mean unseen movies.
-
-    Args:
-        min_ratings: Minimum training ratings for a movie to be ranked.
-    """
-
-    def __init__(self, min_ratings: int = 1) -> None:
+    def __init__(self, min_ratings=1):
         self.min_ratings = min_ratings
 
-    def fit(self, train_matrix: np.ndarray) -> "PopularityRecommender":
-        """Compute per-movie rating counts and means."""
-        raise NotImplementedError("TODO")
+    def fit(self, train_matrix):
+        self.seen = train_matrix != 0
+        counts = self.seen.sum(axis=0)
+        global_mean = train_matrix[self.seen].mean()
+        self.means = np.divide(train_matrix.sum(axis=0), counts,
+                               out=np.full(len(counts), global_mean), where=counts > 0)
+        items = np.flatnonzero(counts >= self.min_ratings)
+        self.order = items[np.lexsort((items, -self.means[items], -counts[items]))]
+        self.counts = counts
+        return self
 
-    def predict(self, user: int, item: int) -> float:
-        """Movie mean rating, global mean if unseen (1-based ids)."""
-        raise NotImplementedError("TODO")
+    def predict(self, user, item):
+        return float(self.means[item - 1])
 
-    def recommend(self, user: int, n: int = 10) -> list[tuple[int, float]]:
-        """Top-``n`` popular unseen movies as ``(movie_id, score)``."""
-        raise NotImplementedError("TODO")
+    def recommend(self, user, n=10):
+        unseen = self.order[~self.seen[user - 1, self.order]]
+        return [(int(i + 1), float(self.counts[i])) for i in unseen[:max(n, 0)]]

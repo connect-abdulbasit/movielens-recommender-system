@@ -23,7 +23,7 @@ def precision_at_k(recommended: Sequence[int], relevant: Collection[int], k: int
     if k <= 0:
         return 0.0
     top_k = recommended[:k]
-    hits = sum(1 for item in top_k if item in relevant)
+    hits = len(set(top_k).intersection(relevant))
     return hits / k
 
 
@@ -32,10 +32,10 @@ def recall_at_k(recommended: Sequence[int], relevant: Collection[int], k: int) -
 
     Returns 0.0 when ``relevant`` is empty.
     """
-    if not relevant:
+    if k <= 0 or len(relevant) == 0:
         return 0.0
     top_k = recommended[:k]
-    hits = sum(1 for item in top_k if item in relevant)
+    hits = len(set(top_k).intersection(relevant))
     return hits / len(relevant)
 
 

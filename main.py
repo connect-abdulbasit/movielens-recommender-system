@@ -31,6 +31,8 @@ def cmd_recommend(user: int, method: str, n: int, fold: int) -> None:
 
     if not 1 <= user <= N_USERS:
         raise SystemExit(f"--user must be between 1 and {N_USERS}")
+    if n < 1:
+        raise SystemExit("-n must be positive")
     train, _ = load_ratings(fold)
     matrix, movies = build_matrix(train), load_movies()
     features, names = item_feature_matrix(movies)
@@ -45,12 +47,9 @@ def cmd_recommend(user: int, method: str, n: int, fold: int) -> None:
     else:
         from src.naive_bayes import NaiveBayesRecommender
 
-        try:
-            model = NaiveBayesRecommender().fit(matrix, features[:, : len(GENRES)])
-            recs = model.recommend(user, n)
-            reasons = {movie: explain_nb(model.explain(user, movie), movies) for movie, _ in recs}
-        except NotImplementedError:
-            raise SystemExit("Naive Bayes is not implemented yet (other team's part).")
+        model = NaiveBayesRecommender().fit(matrix, features[:, : len(GENRES)])
+        recs = model.recommend(user, n)
+        reasons = {movie: explain_nb(model.explain(user, movie), movies) for movie, _ in recs}
     print(f"Top {n} recommendations for user {user}:")
     print(format_recommendations(recs, movies, reasons))
 

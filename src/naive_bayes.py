@@ -1,59 +1,66 @@
-"""Per-user Naive Bayes recommender over movie genres.
-
-For each user, ratings >= ``like_threshold`` are "Like", the rest "Dislike".
-The model learns P(Like), P(genre | Like) and P(genre | Dislike) with Laplace
-smoothing, then ranks unseen movies by P(Like | genres of the movie).
-"""
-from __future__ import annotations
-
-from typing import Any
-
+"""Personalised Bernoulli Naive Bayes on binary MovieLens genre flags."""
 import numpy as np
+
+from src.data_loader import GENRES
 
 
 class NaiveBayesRecommender:
-    """Genre-based Naive Bayes recommender, one model per user.
-
-    Args:
-        like_threshold: Minimum rating counted as a "Like".
-        alpha: Laplace smoothing constant.
-    """
-
-    def __init__(self, like_threshold: int = 4, alpha: float = 1.0) -> None:
+    def __init__(self, like_threshold=4, alpha=1.0):
+        if not np.isfinite(alpha) or alpha <= 0:
+            raise ValueError("alpha must be positive and finite")
         self.like_threshold = like_threshold
         self.alpha = alpha
 
-    def fit(self, train_matrix: np.ndarray, item_genres: np.ndarray) -> "NaiveBayesRecommender":
-        """Estimate per-user priors and genre likelihoods.
+    def fit(self, train_matrix, item_genres):
+        ratings = np.asarray(train_matrix)
+        genres = np.asarray(item_genres, dtype=float)
+        if ratings.ndim != 2 or genres.shape != (ratings.shape[1], len(GENRES)):
+            raise ValueError("Supply one row of MovieLens genre flags per movie")
+        if not np.isin(genres, [0, 1]).all():
+            raise ValueError("Genre flags must be binary")
+        self.seen = ratings != 0
+        self.genres = genres
+        liked = self.seen & (ratings >= self.like_threshold)
+        disliked = self.seen & ~liked
+        likes = liked.sum(axis=1)
+        dislikes = disliked.sum(axis=1)
+        self.prior = (likes + self.alpha) / (likes + dislikes + 2 * self.alpha)
 
-        Args:
-            train_matrix: ``(n_users, n_items)`` ratings, 0 = unrated.
-            item_genres: ``(n_items, 19)`` binary genre matrix.
+        def likelihood(mask, counts):
+            return (mask @ genres + self.alpha) / (counts[:, None] + 2 * self.alpha)
 
-        Returns:
-            ``self``.
-        """
-        raise NotImplementedError("TODO: count likes/dislikes per user and genre")
+        pos = likelihood(liked, likes)
+        neg = likelihood(disliked, dislikes)
+        self.present = np.log(pos) - np.log(neg)
+        self.absent = np.log1p(-pos) - np.log1p(-neg)
+        # Start with all genres absent and replace evidence for each present genre.
+        base = np.log(self.prior) - np.log1p(-self.prior) + self.absent.sum(axis=1)
+        odds = base[:, None] + (self.present - self.absent) @ genres.T
+        self.scores = np.exp(-np.logaddexp(0, -odds))
+        return self
 
-    def predict_proba(self, user: int, item: int) -> float:
-        """P(Like | genres of item) for a user (1-based ids)."""
-        raise NotImplementedError("TODO: Bayes rule with smoothed likelihoods")
+    def _index(self, value, size):
+        if not 1 <= value <= size:
+            raise ValueError(f"ID must be in 1..{size}")
+        return value - 1
 
-    def recommend(self, user: int, n: int = 10) -> list[tuple[int, float]]:
-        """Top-n unseen movies ranked by P(Like | genres).
+    def predict_proba(self, user, item):
+        u = self._index(user, len(self.seen))
+        i = self._index(item, len(self.genres))
+        return float(self.scores[u, i])
 
-        Returns:
-            ``[(movie_id, probability), ...]`` best first (1-based ids),
-            excluding movies the user rated in the training set.
-        """
-        raise NotImplementedError("TODO: score all unseen items and sort")
+    def recommend(self, user, n=10):
+        u = self._index(user, len(self.seen))
+        unseen = np.flatnonzero(~self.seen[u])
+        order = np.argsort(-self.scores[u, unseen], kind="stable")[:max(n, 0)]
+        return [(int(i + 1), float(self.scores[u, i])) for i in unseen[order]]
 
-    def explain(self, user: int, item: int) -> dict[str, Any]:
-        """Return the internals behind a probability (1-based ids).
-
-        Returns:
-            Dict with e.g. ``prior_like``, ``probability`` and
-            ``genre_contributions``: list of ``(genre, log_odds)`` for the
-            movie's genres. Feed it to ``src.explain``.
-        """
-        raise NotImplementedError("TODO: per-genre log-likelihood ratios")
+    def explain(self, user, item):
+        probability = self.predict_proba(user, item)
+        u, i = user - 1, item - 1
+        present = self.genres[i].astype(bool)
+        evidence = [(GENRES[g], float(self.present[u, g])) for g in np.flatnonzero(present)]
+        evidence.sort(key=lambda pair: -abs(pair[1]))
+        return dict(prior_like=float(self.prior[u]), probability=probability,
+                    genre_contributions=evidence,
+                    absent_log_odds=float(self.absent[u, ~present].sum()))

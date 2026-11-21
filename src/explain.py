@@ -59,7 +59,15 @@ def explain_nb(info: dict[str, Any], movies: pd.DataFrame, max_genres: int = 3) 
     Returns:
         e.g. "You usually like Drama and War, which this movie is ...".
     """
-    raise NotImplementedError("TODO")
+    summary = f"Estimated chance of a like: {info['probability']:.0%} (prior {info['prior_like']:.0%})."
+    reasons = []
+    for genre, effect in info["genre_contributions"][:max_genres]:
+        if abs(effect) > 1e-9:
+            direction = "raises" if effect > 0 else "lowers"
+            reasons.append(f"{genre} {direction} the odds")
+    if reasons:
+        return summary + " Among its genres, " + ", ".join(reasons) + "."
+    return summary + " Its listed genres provide no directional evidence."
 
 
 def format_recommendations(

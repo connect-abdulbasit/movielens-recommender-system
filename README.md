@@ -25,6 +25,8 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+For this handoff, copy the original project’s entire data/ml-100k folder into the extracted project, beside src/. On Windows activate the environment with .venv\Scripts\activate. Python 3.10+ is required.
+
 The dataset lives in `data/ml-100k/` (official `u1..u5` train/test splits).
 
 ## Usage
@@ -46,14 +48,14 @@ Metrics: Precision@K, Recall@K, RMSE, MAE.
 
 ## Results
 
-_TODO: fill in after running `python main.py evaluate`._
+Five-fold mean ± population standard deviation. The two ranking columns are fractions.
 
 | Model | Precision@10 | Recall@10 | RMSE | MAE |
-|-------|--------------|-----------|------|-----|
-| Random | | | | |
-| Popularity | | | | |
-| Neural Network | | | | |
-| Naive Bayes | | | | |
+|---|---:|---:|---:|---:|
+| Random | 0.0099 ± 0.0032 | 0.0056 ± 0.0004 | 1.1256 ± 0.0156 | 0.9447 ± 0.0131 |
+| Popularity | 0.1567 ± 0.0330 | 0.1360 ± 0.0100 | 1.0246 ± 0.0063 | 0.8174 ± 0.0061 |
+| Naive Bayes | 0.0366 ± 0.0103 | 0.0242 ± 0.0034 | N/A | N/A |
+| Neural Network | 0.0941 ± 0.0316 | 0.0570 ± 0.0099 | 0.9401 ± 0.0057 | 0.7447 ± 0.0047 |
 
 ## Layout
 

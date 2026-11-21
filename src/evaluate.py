@@ -66,8 +66,7 @@ def evaluate_fold(fold: int, k: int = TOP_K) -> pd.DataFrame:
 
     Ranking metrics use only movies not rated in train; relevant = test
     rating >= 4. RMSE/MAE are computed on all test ratings (not applicable to
-    models that do not predict ratings, e.g. Naive Bayes -> NaN). A model whose
-    ``fit`` is not implemented yet is skipped with a message.
+    models that do not predict ratings, e.g. Naive Bayes -> NaN).
 
     Returns:
         DataFrame with one row per model and columns
@@ -78,11 +77,7 @@ def evaluate_fold(fold: int, k: int = TOP_K) -> pd.DataFrame:
     item_features, feature_names = item_feature_matrix(load_movies())
     rows = []
     for name, (model, fit) in build_models(item_features, feature_names).items():
-        try:
-            fit(train_matrix)
-        except NotImplementedError:  # a teammate's model that is still a stub
-            print(f"  skipping {name}: not implemented yet")
-            continue
+        fit(train_matrix)
         precision, recall = ranking_scores(model, train_matrix, test, k)
         rmse, mae = rating_errors(model, test)
         rows.append({"model": name, f"precision@{k}": precision, f"recall@{k}": recall, "rmse": rmse, "mae": mae})
@@ -123,6 +118,8 @@ def run_all(k: int = TOP_K, out_path: Path = RESULTS_PATH) -> pd.DataFrame:
         folds.append(evaluate_fold(fold, k))
     summary = summarise(folds)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.concat([frame.assign(fold=i) for i, frame in enumerate(folds, 1)]).to_csv(
+        out_path.with_name("fold_results.csv"), index=False)
     summary.to_csv(out_path, index=False)
     print(format_table(summary).to_string(index=False))
     return summary
