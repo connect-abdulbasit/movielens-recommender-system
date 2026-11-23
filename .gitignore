@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .venv/
+# Loose PNGs in results/ stay untracked; the report figures in results/figures/ are tracked.
 results/*.png
+!results/figures/*.png
 .pytest_cache/
 .DS_Store
