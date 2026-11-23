@@ -3,6 +3,9 @@
 Usage:
     python main.py recommend --user 196 --method nn
     python main.py evaluate
+    python main.py experiments [--fresh]
+    python main.py plots
+    python main.py human-eval
 """
 from __future__ import annotations
 
@@ -10,7 +13,7 @@ import argparse
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """Create the argument parser with ``recommend`` and ``evaluate`` commands."""
+    """Create the argument parser with all sub-commands."""
     parser = argparse.ArgumentParser(description="MovieLens recommender: Neural Network vs Naive Bayes")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -21,6 +24,15 @@ def build_parser() -> argparse.ArgumentParser:
     rec.add_argument("--fold", type=int, default=1, choices=range(1, 6), help="training split")
 
     sub.add_parser("evaluate", help="Evaluate all models on u1..u5, write results/results.csv")
+
+    exp = sub.add_parser("experiments", help="Sensitivity analyses on u1..u5, write results/experiments*.csv")
+    exp.add_argument("--fresh", action="store_true", help="ignore runs cached in results/experiments_by_fold.csv")
+
+    sub.add_parser("plots", help="Draw the figures in results/figures/ from the results CSVs")
+
+    human = sub.add_parser("human-eval", help="Write the blind human-evaluation kit to human_eval/")
+    human.add_argument("--users", type=int, default=10, help="number of MovieLens users to show")
+    human.add_argument("--seed", type=int, default=0, help="seed for picking users and shuffling lists")
     return parser
 
 
@@ -43,7 +55,7 @@ def cmd_recommend(user: int, method: str, n: int, fold: int) -> None:
         print(f"Training the neural network on fold {fold} ...")
         model = NeuralRecommender().fit(matrix, features, names)
         recs = model.recommend(user, n)
-        reasons = {movie: explain_nn(model.explain(user, movie), movies) for movie, _ in recs}
+        reasons = {movie: explain_nn(model.explain(user, movie)) for movie, _ in recs}
     else:
         from src.naive_bayes import NaiveBayesRecommender
 
@@ -63,6 +75,18 @@ def main(argv: list[str] | None = None) -> None:
         from src.evaluate import run_all
 
         run_all()
+    elif args.command == "experiments":
+        from src.experiments import run_experiments
+
+        run_experiments(resume=not args.fresh)
+    elif args.command == "plots":
+        from src.plots import make_all
+
+        make_all()
+    elif args.command == "human-eval":
+        from src.human_eval import write_kit
+
+        write_kit(n_users=args.users, seed=args.seed)
 
 
 if __name__ == "__main__":

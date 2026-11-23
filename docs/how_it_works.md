@@ -110,18 +110,36 @@ Groups are the reasons a person understands:
 * movie popularity
 * the movie's average rating
 
-A positive number means that group pushed the rating up. Example output turned
-into a sentence by `explain_nn`:
+A positive number means that group pushed the rating up. Real output of
+`python main.py recommend --user 196 --method nn` (fold 1, the first
+recommendation, E.T. the Extra-Terrestrial), turned into a sentence by
+`explain_nn`:
 
-> Predicted 4.4 stars. Mainly because: this movie's average rating (+0.76), you
-> rate Sci-Fi above your average (+0.32).
+> Predicted 4.2 stars. Mainly because: you rate Fantasy above your average
+> (+0.47), Children's raises the estimate here (+0.45), Sci-Fi raises the
+> estimate here although you rate it below your average (+0.37).
+
+How a genre reason is worded. The number in brackets is the genre group's
+occlusion delta, which mixes the genre flag and the user's taste for it, so its
+sign alone says nothing about the user's taste. The sentence therefore takes the
+taste direction from the user's real taste value:
+
+* taste and effect point the same way: "you rate Fantasy above your average (+0.47)";
+* they point opposite ways (the genre flag outweighs the taste): "Sci-Fi raises
+  the estimate here although you rate it below your average (+0.37)";
+* the user has no taste for that genre (never rated it, taste exactly 0):
+  "Children's raises the estimate here (+0.45)", with no claim about taste.
+
+`scripts/check_explanations.py` checks every Top-10 explanation of all 943
+users on fold 1 and counts stated tastes that contradict the real taste; it
+prints 0. (The earlier wording took the direction from the delta; an audit of
+the Top-10 lists of every 7th user on fold 1 found it wrong for 271 of 1,283
+genre reasons, 21%.)
 
 Limits: the numbers are not additive (the network is non-linear, so the deltas
 need not sum to the total), and the user-activity and "average taste" features
 are not shown as separate reasons: activity belongs to the user-level group,
-average taste is left as background. For genre reasons the delta mixes the
-genre flag and the user's taste, which is why the sentence says "you rate X above
-your average": the taste is usually what drives it.
+average taste is left as background.
 
 ## How we evaluate (`src/evaluate.py`)
 

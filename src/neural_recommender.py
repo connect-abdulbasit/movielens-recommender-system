@@ -175,11 +175,18 @@ class NeuralRecommender:
         rating up. Unlike a weight inspection, this works for any non-linear model.
 
         Returns:
-            ``{"prediction", "user_mean", "contributions"}`` where contributions
-            is ``[(label, delta), ...]`` sorted by ``|delta|``, largest first.
+            ``{"prediction", "user_mean", "contributions", "genre_taste"}`` where
+            contributions is ``[(label, delta), ...]`` sorted by ``|delta|``,
+            largest first, and genre_taste maps each genre of the movie to the
+            user's (unscaled) taste feature: positive = the user rates that genre
+            above their own average.
         """
         u, i = user - 1, item - 1
         X, user_mean = self.builder.build(np.array([u]), np.array([i]), leave_one_out=False)
+        genre_taste = {
+            self.builder.feature_names[g]: float(X[0, self.builder.taste_column(int(g))])
+            for g in np.flatnonzero(self.builder.genre_flags[i])
+        }
         x = self._scale(X)
         base = self.net.forward(x)[0]
         contributions = []
@@ -189,4 +196,9 @@ class NeuralRecommender:
             contributions.append((label, float(base - self.net.forward(occluded)[0])))
         contributions.sort(key=lambda pair: abs(pair[1]), reverse=True)
         prediction = float(np.clip(user_mean[0] + base, MIN_RATING, MAX_RATING))
-        return {"prediction": prediction, "user_mean": float(user_mean[0]), "contributions": contributions}
+        return {
+            "prediction": prediction,
+            "user_mean": float(user_mean[0]),
+            "contributions": contributions,
+            "genre_taste": genre_taste,
+        }

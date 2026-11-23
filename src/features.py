@@ -174,6 +174,10 @@ class FeatureBuilder:
 
     # ---- groups used by explain() -------------------------------------------
 
+    def taste_column(self, genre: int) -> int:
+        """Column holding the user's taste for ``genre`` (0-based genre index)."""
+        return self.item_features.shape[1] + 2 + genre  # after the item features and 2 user-level columns
+
     def groups(self, item: int) -> dict[str, list[int]]:
         """Feature columns that belong together, for one movie (0-based index).
 
@@ -186,7 +190,7 @@ class FeatureBuilder:
         taste_start = n_item_features + 2  # after the 2 user-level columns
         groups: dict[str, list[int]] = {}
         for genre in np.flatnonzero(self.genre_flags[item]):
-            groups[self.feature_names[genre]] = [int(genre), taste_start + int(genre)]
+            groups[self.feature_names[genre]] = [int(genre), self.taste_column(int(genre))]
         if n_item_features > self.n_genres:
             groups[LABEL_ERA] = list(range(self.n_genres, n_item_features))
         groups[LABEL_USER_LEVEL] = [n_item_features, n_item_features + 1]
