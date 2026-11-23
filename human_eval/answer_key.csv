@@ -1,0 +1,51 @@
+user_id,part,label,model,movie_id
+15,list,A,Neural Network,
+15,list,B,Popularity,
+15,list,C,Naive Bayes,
+15,explanation,X,Naive Bayes,51
+15,explanation,Y,Neural Network,313
+49,list,A,Naive Bayes,
+49,list,B,Neural Network,
+49,list,C,Popularity,
+49,explanation,X,Naive Bayes,95
+49,explanation,Y,Neural Network,143
+89,list,A,Neural Network,
+89,list,B,Popularity,
+89,list,C,Naive Bayes,
+89,explanation,X,Neural Network,313
+89,explanation,Y,Naive Bayes,426
+234,list,A,Neural Network,
+234,list,B,Popularity,
+234,list,C,Naive Bayes,
+234,explanation,X,Naive Bayes,302
+234,explanation,Y,Neural Network,408
+323,list,A,Popularity,
+323,list,B,Naive Bayes,
+323,list,C,Neural Network,
+323,explanation,X,Naive Bayes,403
+323,explanation,Y,Neural Network,1594
+360,list,A,Neural Network,
+360,list,B,Naive Bayes,
+360,list,C,Popularity,
+360,explanation,X,Neural Network,427
+360,explanation,Y,Naive Bayes,544
+527,list,A,Popularity,
+527,list,B,Naive Bayes,
+527,list,C,Neural Network,
+527,explanation,X,Naive Bayes,562
+527,explanation,Y,Neural Network,589
+623,list,A,Popularity,
+623,list,B,Neural Network,
+623,list,C,Naive Bayes,
+623,explanation,X,Naive Bayes,1239
+623,explanation,Y,Neural Network,174
+788,list,A,Neural Network,
+788,list,B,Naive Bayes,
+788,list,C,Popularity,
+788,explanation,X,Neural Network,50
+788,explanation,Y,Naive Bayes,1485
+821,list,A,Naive Bayes,
+821,list,B,Neural Network,
+821,list,C,Popularity,
+821,explanation,X,Naive Bayes,20
+821,explanation,Y,Neural Network,408
