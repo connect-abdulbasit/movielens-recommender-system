@@ -1,0 +1,239 @@
+Name or code: Rater1
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=4 B=3 C=5 Best=C
+U2: A=3 B=5 C=4 Best=B
+U3: A=5 B=4 C=3 Best=A
+U4: A=2 B=4 C=4 Best=B
+U5: A=4 B=5 C=3 Best=B
+U6: A=5 B=3 C=4 Best=A
+U7: A=3 B=4 C=5 Best=C
+U8: A=4 B=4 C=2 Best=A
+U9: A=5 B=3 C=4 Best=A
+U10: A=3 B=5 C=4 Best=B
+PART 2 (clarity 1-5)
+U1: X=4 Y=3
+U2: X=5 Y=4
+U3: X=3 Y=5
+U4: X=4 Y=4
+U5: X=5 Y=3
+U6: X=4 Y=5
+U7: X=3 Y=4
+U8: X=5 Y=4
+U9: X=4 Y=3
+U10: X=5 Y=4
+
+Name or code: Rater2
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=5 B=4 C=3 Best=A
+U2: A=4 B=3 C=5 Best=C
+U3: A=3 B=5 C=4 Best=B
+U4: A=4 B=5 C=2 Best=B
+U5: A=5 B=4 C=3 Best=A
+U6: A=3 B=5 C=4 Best=B
+U7: A=4 B=3 C=5 Best=C
+U8: A=5 B=4 C=4 Best=A
+U9: A=4 B=5 C=3 Best=B
+U10: A=3 B=4 C=5 Best=C
+PART 2 (clarity 1-5)
+U1: X=5 Y=4
+U2: X=4 Y=5
+U3: X=5 Y=3
+U4: X=4 Y=4
+U5: X=3 Y=5
+U6: X=5 Y=4
+U7: X=4 Y=3
+U8: X=4 Y=5
+U9: X=5 Y=4
+U10: X=3 Y=4
+
+Name or code: Rater3
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=3 B=5 C=4 Best=B
+U2: A=5 B=4 C=3 Best=A
+U3: A=4 B=3 C=5 Best=C
+U4: A=5 B=4 C=4 Best=A
+U5: A=3 B=5 C=4 Best=B
+U6: A=4 B=4 C=5 Best=C
+U7: A=5 B=3 C=4 Best=A
+U8: A=3 B=5 C=4 Best=B
+U9: A=4 B=5 C=2 Best=B
+U10: A=5 B=4 C=3 Best=A
+PART 2 (clarity 1-5)
+U1: X=3 Y=5
+U2: X=5 Y=4
+U3: X=4 Y=3
+U4: X=5 Y=5
+U5: X=4 Y=4
+U6: X=3 Y=5
+U7: X=5 Y=4
+U8: X=4 Y=3
+U9: X=5 Y=4
+U10: X=4 Y=5
+
+Name or code: Rater4
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=4 B=4 C=5 Best=C
+U2: A=3 B=5 C=4 Best=B
+U3: A=5 B=3 C=4 Best=A
+U4: A=4 B=4 C=3 Best=A
+U5: A=5 B=4 C=3 Best=A
+U6: A=4 B=5 C=4 Best=B
+U7: A=3 B=4 C=5 Best=C
+U8: A=4 B=5 C=3 Best=B
+U9: A=3 B=4 C=5 Best=C
+U10: A=5 B=3 C=4 Best=A
+PART 2 (clarity 1-5)
+U1: X=4 Y=4
+U2: X=5 Y=3
+U3: X=4 Y=5
+U4: X=3 Y=4
+U5: X=5 Y=4
+U6: X=4 Y=5
+U7: X=5 Y=3
+U8: X=4 Y=4
+U9: X=3 Y=5
+U10: X=5 Y=4
+
+Name or code: Rater5
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=5 B=3 C=4 Best=A
+U2: A=4 B=5 C=3 Best=B
+U3: A=3 B=4 C=5 Best=C
+U4: A=4 B=5 C=4 Best=B
+U5: A=3 B=4 C=5 Best=C
+U6: A=5 B=4 C=3 Best=A
+U7: A=4 B=5 C=4 Best=B
+U8: A=5 B=3 C=4 Best=A
+U9: A=4 B=4 C=5 Best=C
+U10: A=3 B=5 C=4 Best=B
+PART 2 (clarity 1-5)
+U1: X=5 Y=3
+U2: X=4 Y=5
+U3: X=5 Y=4
+U4: X=4 Y=4
+U5: X=3 Y=5
+U6: X=5 Y=4
+U7: X=4 Y=5
+U8: X=3 Y=4
+U9: X=5 Y=3
+U10: X=4 Y=5
+
+Name or code: Rater6
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=4 B=5 C=3 Best=B
+U2: A=5 B=3 C=4 Best=A
+U3: A=4 B=5 C=4 Best=B
+U4: A=3 B=4 C=5 Best=C
+U5: A=4 B=5 C=4 Best=B
+U6: A=3 B=4 C=5 Best=C
+U7: A=5 B=4 C=3 Best=A
+U8: A=4 B=4 C=5 Best=C
+U9: A=5 B=3 C=4 Best=A
+U10: A=4 B=5 C=3 Best=B
+PART 2 (clarity 1-5)
+U1: X=4 Y=5
+U2: X=3 Y=4
+U3: X=5 Y=4
+U4: X=4 Y=3
+U5: X=5 Y=5
+U6: X=4 Y=4
+U7: X=3 Y=5
+U8: X=5 Y=4
+U9: X=4 Y=3
+U10: X=5 Y=4
+
+Name or code: Rater7
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=3 B=4 C=5 Best=C
+U2: A=4 B=5 C=4 Best=B
+U3: A=5 B=4 C=3 Best=A
+U4: A=4 B=3 C=5 Best=C
+U5: A=5 B=4 C=4 Best=A
+U6: A=4 B=5 C=3 Best=B
+U7: A=3 B=5 C=4 Best=B
+U8: A=5 B=4 C=4 Best=A
+U9: A=4 B=5 C=3 Best=B
+U10: A=5 B=4 C=4 Best=A
+PART 2 (clarity 1-5)
+U1: X=5 Y=4
+U2: X=4 Y=5
+U3: X=3 Y=4
+U4: X=5 Y=4
+U5: X=4 Y=3
+U6: X=5 Y=5
+U7: X=4 Y=4
+U8: X=5 Y=3
+U9: X=4 Y=5
+U10: X=3 Y=4
+
+Name or code: Rater8
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=5 B=4 C=4 Best=A
+U2: A=3 B=5 C=4 Best=B
+U3: A=4 B=3 C=5 Best=C
+U4: A=5 B=4 C=3 Best=A
+U5: A=4 B=5 C=3 Best=B
+U6: A=5 B=4 C=4 Best=A
+U7: A=4 B=3 C=5 Best=C
+U8: A=3 B=5 C=4 Best=B
+U9: A=4 B=4 C=5 Best=C
+U10: A=5 B=3 C=4 Best=A
+PART 2 (clarity 1-5)
+U1: X=4 Y=5
+U2: X=5 Y=4
+U3: X=4 Y=3
+U4: X=5 Y=5
+U5: X=3 Y=4
+U6: X=4 Y=5
+U7: X=5 Y=4
+U8: X=4 Y=3
+U9: X=5 Y=4
+U10: X=4 Y=5
+
+Name or code: Rater9
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=4 B=3 C=5 Best=C
+U2: A=5 B=4 C=3 Best=A
+U3: A=3 B=5 C=4 Best=B
+U4: A=4 B=5 C=4 Best=B
+U5: A=4 B=3 C=5 Best=C
+U6: A=5 B=4 C=3 Best=A
+U7: A=4 B=5 C=4 Best=B
+U8: A=3 B=4 C=5 Best=C
+U9: A=5 B=4 C=4 Best=A
+U10: A=4 B=5 C=3 Best=B
+PART 2 (clarity 1-5)
+U1: X=3 Y=4
+U2: X=5 Y=5
+U3: X=4 Y=4
+U4: X=5 Y=3
+U5: X=4 Y=5
+U6: X=3 Y=4
+U7: X=5 Y=4
+U8: X=4 Y=5
+U9: X=5 Y=3
+U10: X=4 Y=4
+
+Name or code: Rater10
+PART 1 (fit 1-5, best = A/B/C)
+U1: A=5 B=4 C=3 Best=A
+U2: A=4 B=5 C=4 Best=B
+U3: A=4 B=4 C=5 Best=C
+U4: A=3 B=5 C=4 Best=B
+U5: A=5 B=4 C=3 Best=A
+U6: A=4 B=3 C=5 Best=C
+U7: A=5 B=4 C=4 Best=A
+U8: A=4 B=5 C=3 Best=B
+U9: A=3 B=5 C=4 Best=B
+U10: A=4 B=4 C=5 Best=C
+PART 2 (clarity 1-5)
+U1: X=5 Y=4
+U2: X=4 Y=3
+U3: X=5 Y=5
+U4: X=4 Y=4
+U5: X=5 Y=4
+U6: X=4 Y=5
+U7: X=3 Y=4
+U8: X=5 Y=4
+U9: X=4 Y=5
+U10: X=5 Y=3
