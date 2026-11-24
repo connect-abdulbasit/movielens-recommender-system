@@ -100,5 +100,4 @@ human_eval/     blind human-evaluation kit (rater sheet, template, answer key, t
 data/ml-100k/   MovieLens 100K
 report/         final report
 proposal/       revised project proposal
-handoff/, docs/Hanzala_handoff.md, MovieLens.zip   team handoff material (internal)
 ```
