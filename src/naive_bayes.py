@@ -1,8 +1,6 @@
-"""Personalised Bernoulli Naive Bayes on binary MovieLens genre flags."""
 import numpy as np
 
 from src.data_loader import GENRES
-
 
 class NaiveBayesRecommender:
     def __init__(self, like_threshold=4, alpha=1.0):
@@ -33,7 +31,6 @@ class NaiveBayesRecommender:
         neg = likelihood(disliked, dislikes)
         self.present = np.log(pos) - np.log(neg)
         self.absent = np.log1p(-pos) - np.log1p(-neg)
-        # Start with all genres absent and replace evidence for each present genre.
         base = np.log(self.prior) - np.log1p(-self.prior) + self.absent.sum(axis=1)
         odds = base[:, None] + (self.present - self.absent) @ genres.T
         self.scores = np.exp(-np.logaddexp(0, -odds))

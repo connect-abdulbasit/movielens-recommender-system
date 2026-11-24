@@ -1,6 +1,4 @@
-"""Reproducible random and popularity baselines using training ratings only."""
 import numpy as np
-
 
 class RandomRecommender:
     def __init__(self, seed=0):
@@ -19,7 +17,6 @@ class RandomRecommender:
         rng = np.random.default_rng([self.seed, user])
         ranked = rng.permutation(unseen)[:max(n, 0)]
         return [(int(i + 1), self.mean) for i in ranked]
-
 
 class PopularityRecommender:
     def __init__(self, min_ratings=1):

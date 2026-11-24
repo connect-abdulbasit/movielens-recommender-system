@@ -1,19 +1,8 @@
-"""Command-line interface for the movie recommender project.
-
-Usage:
-    python main.py recommend --user 196 --method nn
-    python main.py evaluate
-    python main.py plots
-    python main.py export [--fold 1] [--top N]
-    python main.py human-eval
-"""
 from __future__ import annotations
 
 import argparse
 
-
 def build_parser() -> argparse.ArgumentParser:
-    """Create the argument parser with all sub-commands."""
     parser = argparse.ArgumentParser(description="MovieLens recommender: Neural Network vs Naive Bayes")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -36,9 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
     human.add_argument("--seed", type=int, default=0, help="seed for picking users and shuffling lists")
     return parser
 
-
 def cmd_recommend(user: int, method: str, n: int, fold: int) -> None:
-    """Fit the chosen model on the fold's training data and print explained recommendations."""
     from src.data_loader import GENRES, N_USERS, build_matrix, item_feature_matrix, load_movies, load_ratings
     from src.explain import explain_nb, explain_nn, format_recommendations
 
@@ -66,9 +53,7 @@ def cmd_recommend(user: int, method: str, n: int, fold: int) -> None:
     print(f"Top {n} recommendations for user {user}:")
     print(format_recommendations(recs, movies, reasons))
 
-
 def main(argv: list[str] | None = None) -> None:
-    """Parse arguments and dispatch to the chosen command."""
     args = build_parser().parse_args(argv)
     if args.command == "recommend":
         cmd_recommend(args.user, args.method, args.n, args.fold)
@@ -90,7 +75,6 @@ def main(argv: list[str] | None = None) -> None:
         from src.human_eval import write_kit
 
         write_kit(n_users=args.users, seed=args.seed)
-
 
 if __name__ == "__main__":
     main()

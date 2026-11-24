@@ -5,7 +5,6 @@ import numpy as np
 from src.naive_bayes import NaiveBayesRecommender
 from src.metrics import precision_at_k, recall_at_k
 
-
 class BayesTests(unittest.TestCase):
     def setUp(self):
         flags = np.zeros((4, 19))

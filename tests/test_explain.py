@@ -1,4 +1,3 @@
-"""Plain-English explanations: every stated taste must match the user's real taste."""
 import re
 
 import numpy as np
@@ -8,30 +7,23 @@ from src.data_loader import GENRES
 from src.explain import explain_nb, explain_nn, format_recommendations
 from src.neural_recommender import NeuralRecommender
 
-
 def _info(contributions, tastes, prediction=4.0):
     return {"prediction": prediction, "user_mean": 3.5, "contributions": contributions, "genre_taste": tastes}
 
-
 def test_genre_effect_against_taste_is_stated_separately():
-    # The audit case: Thriller pushed the estimate up although the user rates Thriller below average.
-    # The old wording said "you rate Thriller above your average", which was false.
     text = explain_nn(_info([("Thriller", 0.17)], {"Thriller": -0.133}))
     assert "you rate Thriller above" not in text
     assert "Thriller raises the estimate here although you rate it below your average (+0.17)" in text
-
 
 def test_genre_effect_matching_taste_keeps_the_short_wording():
     text = explain_nn(_info([("Sci-Fi", 0.2), ("Comedy", -0.1)], {"Sci-Fi": 0.3, "Comedy": -0.2}))
     assert "you rate Sci-Fi above your average (+0.20)" in text
     assert "you rate Comedy below your average (-0.10)" in text
 
-
 def test_genre_without_taste_makes_no_taste_claim():
     text = explain_nn(_info([("Children's", 0.45)], {"Children's": 0.0}))
     assert "Children's raises the estimate here (+0.45)" in text
     assert "you rate" not in text
-
 
 def test_small_effects_are_hidden_and_non_genre_phrases():
     assert "No single factor stands out" in explain_nn(_info([("Drama", 0.04)], {"Drama": 0.5}))
@@ -41,7 +33,6 @@ def test_small_effects_are_hidden_and_non_genre_phrases():
         "• this movie's average rating (+0.76)\n"
         "• its release era (-0.30)"
     )
-
 
 def test_real_model_never_misstates_taste(toy_data):
     matrix, features, names = toy_data
@@ -59,7 +50,6 @@ def test_real_model_never_misstates_taste(toy_data):
                 checked += 1
     assert checked > 0
 
-
 def test_explain_nb_wording():
     info = {"probability": 0.84, "prior_like": 0.39, "genre_contributions": [("Fantasy", 1.2), ("Drama", -0.4)]}
     assert explain_nb(info, None) == (
@@ -69,7 +59,6 @@ def test_explain_nb_wording():
     )
     info["genre_contributions"] = [("Drama", 0.0)]
     assert "genres give no clear signal" in explain_nb(info, None)
-
 
 def test_format_recommendations_shows_titles_and_reasons():
     movies = pd.DataFrame({"item_id": [1, 2], "title": ["Toy Story (1995)", "GoldenEye (1995)"]})
