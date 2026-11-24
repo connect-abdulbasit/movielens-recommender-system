@@ -1,8 +1,9 @@
 # Human evaluation (blind plausibility study)
 
-This folder holds a kit for the "performance by human judgement" part of the
-project. No study has been run yet: there are **no human ratings** in this
-repository until you collect them.
+This folder holds the "performance by human judgement" part of the project.
+The study has been run: 10 classmates rated 10 users (300 rows). Their
+original replies are in `raw_replies.txt`, typed into `ratings.csv`, and
+`python human_eval/tabulate.py` summarises them.
 
 ## What raters do
 
