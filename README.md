@@ -78,14 +78,14 @@ Metrics: Precision@K, Recall@K, RMSE, MAE.
 ## Results
 
 Five-fold mean ± population standard deviation. The two ranking columns are fractions.
-Run `python main.py evaluate` to produce `results/results.csv`, then fill in this table.
+Produced by `python main.py evaluate` (`results/results.csv`).
 
 | Model | Precision@10 | Recall@10 | RMSE | MAE |
 |---|---:|---:|---:|---:|
-| Random | – | – | – | – |
-| Popularity | – | – | – | – |
-| Naive Bayes | – | – | N/A | N/A |
-| Neural Network | – | – | – | – |
+| Random | 0.0099 ± 0.0032 | 0.0056 ± 0.0004 | 1.1256 ± 0.0156 | 0.9447 ± 0.0131 |
+| Popularity | 0.1567 ± 0.0330 | 0.1360 ± 0.0100 | 1.0246 ± 0.0063 | 0.8174 ± 0.0061 |
+| Naive Bayes | 0.0366 ± 0.0103 | 0.0242 ± 0.0034 | N/A | N/A |
+| Neural Network | 0.0941 ± 0.0316 | 0.0570 ± 0.0099 | 0.9401 ± 0.0057 | 0.7447 ± 0.0047 |
 
 ## Layout
 
