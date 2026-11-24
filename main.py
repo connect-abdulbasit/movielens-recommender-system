@@ -3,8 +3,8 @@
 Usage:
     python main.py recommend --user 196 --method nn
     python main.py evaluate
-    python main.py experiments [--fresh]
     python main.py plots
+    python main.py export [--fold 1] [--top N]
     python main.py human-eval
 """
 from __future__ import annotations
@@ -25,10 +25,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("evaluate", help="Evaluate all models on u1..u5, write results/results.csv")
 
-    exp = sub.add_parser("experiments", help="Sensitivity analyses on u1..u5, write results/experiments*.csv")
-    exp.add_argument("--fresh", action="store_true", help="ignore runs cached in results/experiments_by_fold.csv")
-
     sub.add_parser("plots", help="Draw the figures in results/figures/ from the results CSVs")
+
+    export = sub.add_parser("export", help="Save every model's ranking for every user to results/recommendations/")
+    export.add_argument("--fold", type=int, default=1, choices=range(1, 6), help="training split")
+    export.add_argument("--top", type=int, default=None, help="movies per user (default: all unrated movies)")
 
     human = sub.add_parser("human-eval", help="Write the blind human-evaluation kit to human_eval/")
     human.add_argument("--users", type=int, default=10, help="number of MovieLens users to show")
@@ -75,14 +76,16 @@ def main(argv: list[str] | None = None) -> None:
         from src.evaluate import run_all
 
         run_all()
-    elif args.command == "experiments":
-        from src.experiments import run_experiments
-
-        run_experiments(resume=not args.fresh)
     elif args.command == "plots":
         from src.plots import make_all
 
         make_all()
+    elif args.command == "export":
+        if args.top is not None and args.top < 1:
+            raise SystemExit("--top must be positive")
+        from src.export import export_rankings
+
+        export_rankings(fold=args.fold, top=args.top)
     elif args.command == "human-eval":
         from src.human_eval import write_kit
 

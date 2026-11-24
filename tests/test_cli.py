@@ -27,5 +27,5 @@ def test_argparse_rejects_bad_choices(args, capsys):
 
 def test_all_commands_are_registered():
     parser = build_parser()
-    for command in (["evaluate"], ["experiments", "--fresh"], ["plots"], ["human-eval", "--users", "3"]):
+    for command in (["evaluate"], ["plots"], ["export", "--top", "5"], ["human-eval", "--users", "3"]):
         assert parser.parse_args(command).command == command[0]

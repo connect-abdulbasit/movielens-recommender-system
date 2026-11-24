@@ -6,3 +6,5 @@ results/*.png
 !results/figures/*.png
 .pytest_cache/
 .DS_Store
+# Full per-user rankings from `python main.py export` (too large for GitHub).
+results/recommendations/

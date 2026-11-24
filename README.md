@@ -43,28 +43,27 @@ The dataset is included in the repository in `data/ml-100k/` (official
 ```bash
 python main.py recommend --user 196 --method nn    # or --method nb
 python main.py evaluate                            # writes results/results.csv and fold_results.csv
-python main.py experiments                         # sensitivity analyses, about 75 s (see below)
 python main.py plots                               # figures in results/figures/
+python main.py export                              # every model's ranking for every user (see below)
 python main.py human-eval                          # blind human-evaluation kit in human_eval/
 python scripts/check_explanations.py               # checks NN explanations never misstate a taste
 pytest                                             # run all tests
 ```
 
-- `experiments` re-runs fixed settings on all five folds with the same
-  protocol as `evaluate`: NN hidden layers (8) / (16, 8) / (32, 16) /
-  (64, 32), NN with and without movie statistics, NN taste prior m = 1 / 5 /
-  20, NN seeds 0-4, NB like threshold 3 / 4 and NB alpha 0.1 / 1 / 5, plus the
-  Popularity and Random rows. Nothing is tuned on the test folds and the model
-  defaults stay as they are. Writes `results/experiments.csv` (mean and SD)
-  and `results/experiments_by_fold.csv`. Finished runs are cached in the
-  by-fold file, so an interrupted run resumes; `--fresh` recomputes all.
-- `plots` draws `fig1_ranking.png`, `fig2_rating_error.png`,
-  `fig3_ablation.png` (needs `experiments` first) and
+- `plots` draws `fig1_ranking.png`, `fig2_rating_error.png`, and
   `fig4_training_curve.png`. For the last one it trains the default network
   on fold 1 and saves its per-epoch losses to `results/training_curve.csv`.
+- `export` trains all four models on one fold (`--fold`, default 1) and
+  writes `results/recommendations/fold1/<model>.csv`: for every user, every
+  movie they did not rate in training, ranked, with columns `user_id, rank,
+  movie_id, title, score, test_rating`. `score` is predicted stars (NN),
+  P(like) (NB), number of ratings (Popularity) or the constant global mean
+  (Random). `test_rating` is the user's hidden rating, empty if none; 4 or
+  more counts as a hit. `--top 10` keeps only each user's top 10. The full
+  files are large and are not committed (see `.gitignore`).
 - `human-eval` writes a printable rater sheet, an empty ratings template and
-  an answer key; see [human_eval/README.md](human_eval/README.md). No human
-  ratings have been collected yet.
+  an answer key; see [human_eval/README.md](human_eval/README.md). The
+  collected ratings are in `human_eval/ratings.csv`.
 
 User and movie ids are 1-based (as in MovieLens) at every public interface
 and converted to 0-based indices internally.
@@ -90,9 +89,9 @@ Produced by `python main.py evaluate` (`results/results.csv`).
 ## Layout
 
 ```
-main.py         command-line interface (recommend, evaluate, experiments, plots, human-eval)
+main.py         command-line interface (recommend, evaluate, plots, export, human-eval)
 src/            data loading, features, models, metrics, explanations, evaluation,
-                experiments, plots, human-evaluation kit
+                plots, human-evaluation kit
 scripts/        check_explanations.py: explanation-faithfulness check
 tests/          unit tests
 docs/           how_it_works.md: plain-language explanation of the neural model
