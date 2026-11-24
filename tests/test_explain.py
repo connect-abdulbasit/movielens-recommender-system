@@ -34,9 +34,13 @@ def test_genre_without_taste_makes_no_taste_claim():
 
 
 def test_small_effects_are_hidden_and_non_genre_phrases():
-    assert explain_nn(_info([("Drama", 0.04)], {"Drama": 0.5})).endswith("No single factor stands out.")
+    assert "No single factor stands out" in explain_nn(_info([("Drama", 0.04)], {"Drama": 0.5}))
     text = explain_nn(_info([("movie's average rating", 0.76), ("release era", -0.3)], {}, prediction=4.36))
-    assert text == "Predicted 4.4 stars. Mainly because: this movie's average rating (+0.76), its release era (-0.30)."
+    assert text == (
+        "Predicted 4.4 stars\n"
+        "• this movie's average rating (+0.76)\n"
+        "• its release era (-0.30)"
+    )
 
 
 def test_real_model_never_misstates_taste(toy_data):
@@ -59,13 +63,23 @@ def test_real_model_never_misstates_taste(toy_data):
 def test_explain_nb_wording():
     info = {"probability": 0.84, "prior_like": 0.39, "genre_contributions": [("Fantasy", 1.2), ("Drama", -0.4)]}
     assert explain_nb(info, None) == (
-        "Estimated chance of a like: 84% (prior 39%). Among its genres, Fantasy raises the odds, Drama lowers the odds."
+        "Chance of a like: 84%  (base rate 39%)\n"
+        "• Fantasy raises the odds\n"
+        "• Drama lowers the odds"
     )
     info["genre_contributions"] = [("Drama", 0.0)]
-    assert explain_nb(info, None).endswith("Its listed genres provide no directional evidence.")
+    assert "genres give no clear signal" in explain_nb(info, None)
 
 
 def test_format_recommendations_shows_titles_and_reasons():
     movies = pd.DataFrame({"item_id": [1, 2], "title": ["Toy Story (1995)", "GoldenEye (1995)"]})
-    text = format_recommendations([(2, 4.25), (1, 3.5)], movies, {2: "Because."})
-    assert text.splitlines() == [" 1. GoldenEye (1995)  (score 4.25)", "      Because.", " 2. Toy Story (1995)  (score 3.50)"]
+    text = format_recommendations([(2, 4.25), (1, 3.5)], movies, {2: "Because.\n• detail"})
+    assert text == (
+        " 1. GoldenEye (1995)\n"
+        "    score 4.25\n"
+        "    Because.\n"
+        "    • detail\n"
+        "\n"
+        " 2. Toy Story (1995)\n"
+        "    score 3.50"
+    )

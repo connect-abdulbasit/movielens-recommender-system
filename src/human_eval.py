@@ -129,7 +129,7 @@ def render_sheet(kit: Kit) -> str:
         lines += ["", f"### User {number} of {len(kit.users)} (MovieLens user {user})"]
         for label in REASON_LABELS:
             _, movie, text = kit.reasons[user][label]
-            lines += ["", f"**Reason {label}**, for *{kit.titles[movie]}*: {text}", "",
+            lines += ["", f"**Reason {label}**, for *{kit.titles[movie]}*:", "", text, "",
                       f"How clear and convincing is this reason? (1-5): ____"]
     return "\n".join(lines) + "\n"
 
